@@ -52,7 +52,7 @@ public class UserController {
         // TODO 实现登录功能
 //        return Result.fail("功能未完成");
 
-        return Result.ok(userService.login(loginForm, session));
+        return userService.login(loginForm, session);
     }
 
     /**

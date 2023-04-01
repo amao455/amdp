@@ -10,21 +10,16 @@ import com.hmdp.dto.UserDTO;
 import com.hmdp.entity.User;
 import com.hmdp.mapper.UserMapper;
 import com.hmdp.service.IUserService;
-import com.hmdp.utils.RedisConstants;
 import com.hmdp.utils.RegexUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import cn.hutool.core.lang.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.hmdp.utils.RedisConstants.*;
@@ -64,9 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 4 保存验证码到redis中(设置有效期)
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
-
-
-        // 5 发送验证码
+        // 5 发送验证码(主要是为了方便查看到验证码)
         log.debug("发送短信验证码成功，验证码：{}", code);
 
         // 返回ok
@@ -79,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         String phone = loginForm.getPhone();
         // 1 校验手机号
-        if (RegexUtils.isPhoneInvalid(loginForm.getPhone())) {
+        if (RegexUtils.isPhoneInvalid(phone)) {
             // 如果不符合，直接返回错误信息
             return Result.fail("手机号格式错误");
         }
@@ -104,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 7 保存用户信息到redis中
         // 7.1  随机生成token，作为登录令牌
-        String token = UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString(true);
         // 7.2 将User对象转换为HashMap存储
         UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
         Map<String, Object> userMap = BeanUtil.beanToMap(userDTO, new HashMap<>(),
@@ -123,7 +116,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 //        session.setAttribute("user", BeanUtil.copyProperties(user, UserDTO.class));
 
         // 返回token
-        return Result.ok();
+        return Result.ok(token);
 
 
     }

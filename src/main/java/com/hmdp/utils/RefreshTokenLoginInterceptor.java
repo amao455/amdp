@@ -48,7 +48,6 @@ public class RefreshTokenLoginInterceptor implements HandlerInterceptor {
 
         // 判断用户是否存在
         if (userMap.isEmpty()) {
-
             return true;
         }
 
@@ -56,7 +55,7 @@ public class RefreshTokenLoginInterceptor implements HandlerInterceptor {
         UserDTO userDTO = BeanUtil.fillBeanWithMap(userMap, new UserDTO(), false);
 
         // 6 存在，保存用户信息到 ThreadLocal
-        UserHolder.saveUser((UserDTO) userDTO);
+        UserHolder.saveUser(userDTO);
 
         // 7 刷新token有效期
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
