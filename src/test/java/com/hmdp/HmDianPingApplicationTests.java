@@ -29,6 +29,7 @@ class HmDianPingApplicationTests {
     @Test
     void testIDWorker() throws InterruptedException {
 
+
         CountDownLatch latch = new CountDownLatch(300);
 
         Runnable task = () -> {
@@ -51,7 +52,9 @@ class HmDianPingApplicationTests {
 
     @Test
     void testSaveShop() throws InterruptedException {
+
         shopService.saveShop2Redis(1L, 10L);
+
     }
 
 
