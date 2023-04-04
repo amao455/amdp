@@ -37,6 +37,7 @@ public class RefreshTokenLoginInterceptor implements HandlerInterceptor {
 
         // 1 获取请求头中的token
         String token = request.getHeader("authorization");
+        // 没有token，直接放行
         if (StrUtil.isBlank(token)) {
             return true;
         }
@@ -48,6 +49,7 @@ public class RefreshTokenLoginInterceptor implements HandlerInterceptor {
 
         // 判断用户是否存在
         if (userMap.isEmpty()) {
+            // 不存在，直接放行
             return true;
         }
 

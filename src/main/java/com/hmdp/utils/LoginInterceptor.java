@@ -22,9 +22,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // 判断是否需要拦截（ThreadLocal中是否有用户）
         if (UserHolder.getUser() == null) {
+            // 通过ThreadLocal来判断用户是否登录
             // 没有，需要拦截，设置状态码
             response.setStatus(401);
         }
+
         // 有用户，则放行
         return true;
     }

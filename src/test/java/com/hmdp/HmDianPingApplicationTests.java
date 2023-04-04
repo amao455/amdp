@@ -47,7 +47,9 @@ class HmDianPingApplicationTests {
             latch.countDown();
         };
 
+
         long begin = System.currentTimeMillis();
+
         for (int i = 0; i < 300; i++) {
             es.submit(task);
         }
@@ -67,6 +69,7 @@ class HmDianPingApplicationTests {
 
     @Test
     void loadShopData(){
+
         // 1 查询店铺信息
         List<Shop> list = shopService.list();
 
@@ -93,8 +96,6 @@ class HmDianPingApplicationTests {
 
             // 优点：只用访问redis一次
             stringRedisTemplate.opsForGeo().add(key, locations);
-
-
         }
 
     }
